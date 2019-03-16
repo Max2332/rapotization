@@ -1,22 +1,20 @@
 const
-    //system
     express = require('express'),
     cors = require('cors'),
-    app = express(),
-    {createCanvas, loadImage, Image} = require('canvas'),
-    GIFEncoder = require('gifencoder'),
-    multer = require('./fabrics/multerFabric');
+    fr = require('face-recognition'),
+    sleep = require('sleep'),
+    request = require('request'),
+    http = require('http'),
+    crypto = require('crypto'),
+    fs = require('fs'),
+    {createCanvas, loadImage} = require('canvas'),
+    ffmepgHelper = require('./helpers/ffmpeg'),
+    app = express();
 
 app.use(cors());
 
-app.post('/', (req, res) => {
-    // Загрузка файла
-    multer('file')(req, res, async (err) => {
-        // Если файл не смогли загрузить то ошибка
-        if (err) {
-            return res.status(500).send('Something broke!');
-        }
-    })
+app.get('/', (req, res) => {
+    const image2 = fr.loadImage('path/to/image2.jpg')
 });
 
 app.listen(3000, () => console.log('server running on port 3000'));
