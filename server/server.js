@@ -2,12 +2,15 @@ const
     express = require('express'),
     cors = require('cors'),
     request = require('request'),
-    fr = require('face-recognition'),
     http = require('http'),
-    faceHelper = require('./helpers/face'),
     crypto = require('crypto'),
     fs = require('fs'),
-    {canvas} = require('canvas'),
+    
+    GIFEncoder = require('gifencoder'),
+    faceHelper = require('./helpers/face'),
+    fr = require('face-recognition'),
+    {createCanvas, loadImage, Image} = require('canvas'),
+    
     app = express();
 
 
@@ -21,6 +24,7 @@ app.get('/', (req, res) => {
         const pathFoFile = uploadFolder + fileName;
         const file = fs.createWriteStream(pathFoFile);
         
+        
         /** После того как файл сохранился на сервер **/
         response.pipe(file).on('finish', async () => {
             const faceImg = fr.loadImage(pathFoFile);
@@ -28,7 +32,30 @@ app.get('/', (req, res) => {
             const detector = new fr.FrontalFaceDetector();
             const faceRect = detector.detect(faceImg).pop();
             let facePoints = predictor.predict(faceImg, faceRect).getParts();
-            res.json(faceHelper.foramt(facePoints))
+            facePoints.unshift({}); // ! очень важно
+            const facePart = faceHelper.foramt(facePoints);
+            
+            const canvas = createCanvas(500, 800);
+            const ctx = canvas.getContext('2d');
+            const encoder = new GIFEncoder(500, 800);
+            
+            encoder.createReadStream().pipe(fs.createWriteStream('1.gif'));
+            encoder.start();
+            encoder.setTransparent(0xFF00FF);
+            encoder.setRepeat(0);
+            encoder.setDelay(20);
+            
+            let frames = 0;
+            while (frames < 10) {
+                let image = await loadImage(pathFoFile);
+                ctx.clearRect(0, 0, image.width, image.height);
+                ctx.drawImage(image, 0, 0);
+                encoder.addFrame(ctx);
+                frames++;
+            }
+            
+            encoder.finish();
+            res.json('success')
         });
     });
 });
