@@ -22,13 +22,28 @@ app.get('/', (req, res) => {
     const file = fs.createWriteStream(pathFoFile);
     
     request.get({url: req.query.url}).pipe(file).on('finish', async () => {
+    
+        let gifPath;
+        let mp4WithoutGif ;
+        let promises = [];
         
-        let gifPath = imgHelper.generateGif(pathFoFile);
-        
-        const mp4WithoutGif = await ffmpegHelper.glueMp3WithImg(
+        let generateGifPromise = imgHelper.generateGif(pathFoFile);
+        let glueImgMp3Promise = ffmpegHelper.glueMp3WithImg(
             '/var/www/photolab_v2/upload/test.mp3',
             pathFoFile
         );
+        promises.push(generateGifPromise);
+        promises.push(glueImgMp3Promise);
+    
+        generateGifPromise.then((pathToGif) => {
+            gifPath = pathToGif;
+        });
+    
+        glueImgMp3Promise.then((pathToMp4) => {
+            mp4WithoutGif = pathToMp4;
+        });
+        
+        await Promise.all(promises);
         
         const mp4WithGif = await ffmpegHelper.glueMovWithGif(
             mp4WithoutGif,
