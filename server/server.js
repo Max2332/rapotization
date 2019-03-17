@@ -6,6 +6,7 @@ const
     crypto = require('crypto'),
     fs = require('fs'),
     
+    ffmpegHelper = require('./helpers/ffmpeg'),
     canvasHelper = require('./helpers/canvas'),
     GIFEncoder = require('gifencoder'),
     faceHelper = require('./helpers/face'),
@@ -77,22 +78,33 @@ app.get('/', (req, res) => {
             });
             frames.push(canvasHelper.cloneCanvas(canvas));
         }
-    
+        
         /** Открываем рот */
-        for (var i = 0; i < frames.length; i+=3) {
+        for (var i = 0; i < frames.length; i += 3) {
             let canvas = frames[i];
             let ctx = canvas.getContext('2d');
             encoder.addFrame(ctx);
         }
-    
+        
         /** Закрываем рот */
-        for (var i = frames.length -1; i > 0; i-=3) {
+        for (var i = frames.length - 1; i > 0; i -= 3) {
             let canvas = frames[i];
             let ctx = canvas.getContext('2d');
             encoder.addFrame(ctx);
         }
-    
+        
         encoder.finish();
+        
+        const mp4WithoutGif = await ffmpegHelper.glueMp3WithImg(
+            '/var/www/photolab_v2/upload/test.mp3',
+            pathFoFile
+        );
+        
+        const mp4WithGif = await ffmpegHelper.glueMovWithGif(
+            mp4WithoutGif,
+            gifName,
+            [1, 5, 10]
+        );
         
         res.json('success')
     });
