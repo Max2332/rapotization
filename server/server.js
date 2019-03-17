@@ -7,6 +7,7 @@ const
     fs = require('fs'),
     
     ffmpegHelper = require('./helpers/ffmpeg'),
+    cognetiveHelper = require('./helpers/cognetive'),
     yandexHelper = require('./helpers/yandex'),
     imgHelper = require('./helpers/img'),
     util = require('util'),
@@ -24,6 +25,7 @@ app.get('/', (req, res) => {
     
     request.get({url: req.query.url}).pipe(file).on('finish', async () => {
         
+        let textData = await cognetiveHelper.getTexData(req.query.text);
         let pathToMp3 = await yandexHelper.getSpeech(req.query.text);
         let pathToMp4WithoutGif = await ffmpegHelper.glueMp3WithImg(
             pathToMp3,

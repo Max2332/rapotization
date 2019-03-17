@@ -1,18 +1,18 @@
 let https = require('https');
-let accessKey = 'e2b9729751d34bd4affb3680eb9a7d76';
+let accessKey = 'fca3647a5fb84f60b826c82e3904f0c4';
 
-// fca3647a5fb84f60b826c82e3904f0c4
+// e2b9729751d34bd4affb3680eb9a7d76
 
-let uri = 'westus.api.cognitive.microsoft.com';
+let uri = 'westeurope.api.cognitive.microsoft.com';
 let path = '/text/analytics/v2.0/languages';
 
 module.exports = {
     
-    getfunction: (text) => {
+    getTexData: (text) => {
         
         return new Promise((resolve, reject) => {
             
-            let body = JSON.stringify(text);
+            let body = JSON.stringify({'documents': [{'id': '1', 'text': text}]});
             let request_params = {
                 method: 'POST',
                 hostname: uri,
@@ -29,8 +29,7 @@ module.exports = {
                 });
                 response.on('end', function () {
                     let body_ = JSON.parse(body);
-                    let body__ = JSON.stringify(body_, null, '  ');
-                    resolve(body__);
+                    resolve(body_);
                 });
                 response.on('error', function (e) {
                     console.log('Error: ' + e.message);
