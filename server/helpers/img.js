@@ -1,12 +1,15 @@
-canvasHelper = require('./canvas'),
+const
+    canvasHelper = require('./canvas'),
+    crypto = require('crypto'),
     GIFEncoder = require('gifencoder'),
+    fs = require('fs'),
     faceHelper = require('./face'),
     fr = require('face-recognition'),
     {createCanvas, loadImage, Image} = require('canvas');
 
 
 module.exports = {
-    generateGif: (pathFoFile) => {
+    generateGif: async (pathFoFile) => {
         
         const faceImg = fr.loadImage(pathFoFile);
         const predictor = fr.FaceLandmark68Predictor();
@@ -16,8 +19,7 @@ module.exports = {
         facePoints.unshift({}); // ! очень важно
         const facePart = faceHelper.foramt(facePoints);
         
-        let canvasImg = await
-        loadImage(pathFoFile);
+        let canvasImg = await loadImage(pathFoFile);
         const canvas = createCanvas(canvasImg.width, canvasImg.height);
         const ctx = canvas.getContext('2d');
         const encoder = new GIFEncoder(canvasImg.width, canvasImg.height);

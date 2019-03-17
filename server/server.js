@@ -16,10 +16,9 @@ app.use(cors());
 
 app.get('/', (req, res) => {
     
-    const fileName = crypto.randomBytes(18).toString('hex');
-    const fileExtension = ".jpg";
+    const fileName = crypto.randomBytes(18).toString('hex')+".jpg";
     const uploadFolder = __dirname + "/../upload";
-    const pathFoFile = uploadFolder + '/' + fileName + fileExtension;
+    const pathFoFile = uploadFolder + '/' + fileName;
     const file = fs.createWriteStream(pathFoFile);
     
     request.get({url: req.query.url}).pipe(file).on('finish', async () => {
