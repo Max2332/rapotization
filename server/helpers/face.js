@@ -28,7 +28,6 @@ module.exports = {
                 points[67],
                 points[68],
                 points[61],
-                points[61],
             ],
         }
     }
