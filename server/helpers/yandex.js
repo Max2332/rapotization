@@ -16,7 +16,7 @@ module.exports = {
                     url: 'https://tts.api.cloud.yandex.net/speech/v1/tts:synthesize',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer CggaATEVAgAAABKABGAJ3oiNo2TERHNNLqbw-qpc9c_htv91FZzBIa5HBUPbWiQ1s4Gbp1Gpbu5UZsnpwOmegPYEwzaxzLC8_1LnS65jcA8B19La-daeD4RDbFrx9JODaHa2YGsaFDP7xzX7teYlkopST3rukEtahgvobsn5QOvJq9C7b_yk7NMUGrEk4KPXPwyPkhoWzvP5FHXotZm3kV2os-84lhhjdWozmJWDkZP9AW9bmt8MskzzAllTbISy1e44Sp6oPDdbtBCRr6C96Sy_lq4zeL_gTfaYDNcjno0yXx0RwvFGsS0KxWG0NeEBPQxJkycD8CcWKCsoO6bSAp_KMsOs1Wmt_pK4V54FZbxrFjJeiVwJRPuVX8Z7m9uymDWJx0MUnQgr86qQNPGNPnrbPnpic68d1autmMCPA1ktxTyY4cKtgS_xe4-IHOBHEaYsyfw1V9ph8ZVGwlkXSAB1-7YgDWaWllEcBuQqPrKgcxuTER471bOjtzzta09EelxCg6RCYVM72CeNKE7_Z7tqZMQiM1S6gdZEgaGG6LTfCDULHj65yAxUv084Iq0dHausVFoAB9q3KOv2o8jo4XRVnnSFF2biBGeaIk8H639reaPW-TKICpqZOpfDgcGHDFToiQgZ_PrMTwsN4EnX93i_sm2IEmYd_rk2yNQ86NlFHE6aRkaLmnyHiTjxGmYKIGJkMzhhYjNmZmRlZDQ3MGFiYzA0ZDY1Y2VlNDZjZmU2ELTnt-QFGPS4uuQFIiQKFGFqZTZlMW0ydWtzMm92bzlkYWQ1EgxldG92bGFkaXNsYXZaADACOAFKCBoBMRUCAAAAUAEg9QQ`
+                        'Authorization': `Bearer CggaATEVAgAAABKABH0c4bsM3ebKywvXxwkiR7-MV4Ojd8_q2eC7qYY69HGYNWHN05UwDicnlPbL34Y-HYGy-rdpuiPHL5meVFg_XvT4-eW1Iw2twIzGDSLC5ozYYKXsqCOwfuijIhT6JHUc96JF2zk-jZZzmqTys5eq_49TJQXjHAqsXI-XNWUqKcCOHNZYqHDCJFIbs4dHyyUk2H_Rs7Y152eY6XCfLXZZFpPEW8vE1t3RUMMS8LvRAwZBzTvPLGEDnWvJDgDhFfpdn6eL0zNCOtxfasphNZpECywHDPYPWC9tY2cxgGgCJhl_LjbkKCZ2DlyEWoemuLnRNuQRfOfeh_ihA3d3VNiBg-TRycBQMHoKWHIgktBoWiXkblCWHuhBEN3N1DBOJmAlpm7B57Db1jjmK82ZI1tnfZGZ6UjYJaCxO8Gr_ytEUjOYh5wI2ciA5XsgDlfjQD7dxZw4koawav9T0hfP4HlS4r3Vj8Ajphc6cj4fNtBkPjBlzSOPPK-VWTH51Iwk0cBaSpHHMaMCHB08SmLqxWbC1A2aD2k3RqCHUmvU4ar-aXapWtiv3O6A_iWkE8OuYEdBXK6q0UELHBl-ARGEfZm4a9Dsa2xrvViFTp1QgkhVXv5lj0FaXA4dj7srqwO5E7HjvH0mlp3qaXfmMle8yPBlBDU9cPGvezvpxdGggoX7DJbbGmYKIDg1YTllMzE1ZmU3NjRjN2FhM2VkY2FkMDA3M2IzYzliEITrueQFGMS8vOQFIiQKFGFqZTZlMW0ydWtzMm92bzlkYWQ1EgxldG92bGFkaXNsYXZaADACOAFKCBoBMRUCAAAAUAEg9QQ`
                     },
                     form: {
                         text: text,
@@ -31,7 +31,7 @@ module.exports = {
             
             stream.on('finish', async function () {
                 let beatPath = `${__dirname}/../beat.mp3`;
-                let path = await ffmpegHelper.overlayTwoSounds(pathFoFile,beatPath, 1);
+                let path = await ffmpegHelper.overlayTwoSounds(pathFoFile,beatPath, 2);
                 resolve(path);
             });
         });

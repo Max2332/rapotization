@@ -13,10 +13,14 @@ module.exports = {
                 let textDurations = [];
                 let voiceWords = voiceText.split(' ');
                 let symbolsCount = voiceText.replace(' ', '').length;
-                const delayBetweenWords = 270;
-                let currentDuration = 4 * 1000;
-                let durationPerSymbol = (soundDuration - delayBetweenWords * (voiceWords.length + 1)) / symbolsCount;
+                const delayBetweenWords = 200;
+                let currentDuration = 2 * 1000;
                 voiceWords.forEach(item => {
+                    let durationPerSymbol = (soundDuration - delayBetweenWords * (voiceWords.length + 1)) / symbolsCount;
+                    if (item.length <= 3) {
+                        durationPerSymbol = durationPerSymbol * 5;
+                    }
+                    
                     let texeDurationTmp = {
                         from: currentDuration + delayBetweenWords,
                         to: currentDuration + delayBetweenWords + item.length * durationPerSymbol,
@@ -36,12 +40,20 @@ module.exports = {
         await exec(`ffmpeg -loop 1 -i ${jpgPath} -i ${mp3Path} -c:a copy -shortest ${mp4Path}`);
         return mp4Path;
     },
+    mp4ToMov: async (mp4) => {
+        const fileName = crypto.randomBytes(18).toString('hex') + '.mov';
+        const movPath = `${__dirname}/../../upload/${fileName}`;
+        await exec(`ffmpeg -i ${mp4} -acodec copy -vcodec copy -f mov ${movPath}`);
+        return fileName;
+    },
     glueMovWithGif: async (mp4PathWithoutGif, gifPath, seconds) => {
-        const fileName = crypto.randomBytes(18).toString('hex');
-        const mp4Path = `${__dirname}/../../upload/${fileName}.mp4`;
+        const fileName = crypto.randomBytes(18).toString('hex') + ".mp4";
+        const mp4Path = `${__dirname}/../../upload/${fileName}`;
         let pointBetween = '';
         for (var i = 0; i < seconds.length; i++) {
-            pointBetween += `between(t,${seconds[i].from},${seconds[i].to})`;
+            let from = seconds[i].from / 1000;
+            let to = seconds[i].to / 1000;
+            pointBetween += `between(t,${from.toFixed(2)},${to.toFixed(2)})`;
             if (i + 1 < seconds.length) {
                 pointBetween += ' + ';
             }
@@ -49,7 +61,7 @@ module.exports = {
         let command = `ffmpeg -y -i ${mp4PathWithoutGif} -ignore_loop 0 -i ${gifPath} -filter_complex "overlay=shortest=1:enable='${pointBetween}'" -vcodec mpeg2video -strict -2 ${mp4Path}`;
         console.log(command);
         await exec(command);
-        return mp4Path
+        return fileName
     },
     overlayTwoSounds: (voice, beat, voiceStartDelay) => {
         return new Promise((resolve, reject) => {

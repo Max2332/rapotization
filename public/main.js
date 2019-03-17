@@ -115,3 +115,5 @@ curl -v -X POST "http://api-soft.photolab.me/template_process.php" \
     -F flip[1]=0 \
     -F crop[1]=0,0,1,1 \
     -F template_name="SOME_TEMPLATE_NAME"
+
+

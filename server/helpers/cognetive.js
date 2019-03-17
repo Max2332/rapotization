@@ -4,7 +4,7 @@ let accessKey = 'fca3647a5fb84f60b826c82e3904f0c4';
 // e2b9729751d34bd4affb3680eb9a7d76
 
 let uri = 'westeurope.api.cognitive.microsoft.com';
-let path = '/text/analytics/v2.0/languages';
+let path = '/text/analytics/v2.0/sentiment';
 
 module.exports = {
     

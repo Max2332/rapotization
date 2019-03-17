@@ -66,14 +66,14 @@ module.exports = {
         }
         
         /** Открываем рот */
-        for (var i = 0; i < frames.length; i += 3) {
+        for (var i = 0; i < frames.length; i += 2) {
             let canvas = frames[i];
             let ctx = canvas.getContext('2d');
             encoder.addFrame(ctx);
         }
         
         /** Закрываем рот */
-        for (var i = frames.length - 1; i > 0; i -= 3) {
+        for (var i = frames.length - 1; i > 0; i -= 2) {
             let canvas = frames[i];
             let ctx = canvas.getContext('2d');
             encoder.addFrame(ctx);
