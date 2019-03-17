@@ -1,9 +1,34 @@
 const crypto = require('crypto'),
+    ffmpeg = require('fluent-ffmpeg'),
     exec = require('await-exec'),
     spawn = require('child_process').spawn,
     fs = require('fs');
 
 module.exports = {
+    getWordTiming: (fileName, voiceText) => {
+        return new Promise((resolve, reject) => {
+            let soundDuration;
+            ffmpeg.ffprobe(fileName, function (err, metadata) {
+                soundDuration = metadata.format.duration * 1000;
+                let textDurations = [];
+                let voiceWords = voiceText.split(' ');
+                let symbolsCount = voiceText.replace(' ', '').length;
+                const delayBetweenWords = 270;
+                let currentDuration = 4 * 1000;
+                let durationPerSymbol = (soundDuration - delayBetweenWords * (voiceWords.length + 1)) / symbolsCount;
+                voiceWords.forEach(item => {
+                    let texeDurationTmp = {
+                        from: currentDuration + delayBetweenWords,
+                        to: currentDuration + delayBetweenWords + item.length * durationPerSymbol,
+                    };
+                    textDurations.push(texeDurationTmp);
+                    currentDuration += item.length * durationPerSymbol + delayBetweenWords;
+                    
+                });
+                resolve(textDurations);
+            });
+        });
+    },
     glueMp3WithImg: async (mp3Path, jpgPath) => {
         const fileName = crypto.randomBytes(18).toString('hex');
         const mp4Path = `${__dirname}/../../upload/${fileName}.mp4`;
@@ -16,7 +41,7 @@ module.exports = {
         const mp4Path = `${__dirname}/../../upload/${fileName}.mp4`;
         let pointBetween = '';
         for (var i = 0; i < seconds.length; i++) {
-            pointBetween += `between(t,${seconds[i]},${seconds[i] + 2})`;
+            pointBetween += `between(t,${seconds[i].from},${seconds[i].to})`;
             if (i + 1 < seconds.length) {
                 pointBetween += ' + ';
             }

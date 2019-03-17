@@ -5,7 +5,6 @@ const
     http = require('http'),
     crypto = require('crypto'),
     fs = require('fs'),
-    
     ffmpegHelper = require('./helpers/ffmpeg'),
     cognetiveHelper = require('./helpers/cognetive'),
     yandexHelper = require('./helpers/yandex'),
@@ -32,10 +31,12 @@ app.get('/', (req, res) => {
             pathFoFile
         );
         let gifName = await imgHelper.generateGif(pathFoFile);
-        
+    
+        const wordTiming = await ffmpegHelper.getWordTiming(pathToMp3, req.query.text);
         const mp4WithGif = await ffmpegHelper.glueMovWithGif(
             pathToMp4WithoutGif,
             gifName,
+            wordTiming
         );
         
         res.json('success')
