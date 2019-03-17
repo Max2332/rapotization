@@ -41,8 +41,9 @@ app.get('/', (req, res) => {
         const encoder = new GIFEncoder(canvasImg.width, canvasImg.height);
         const lipPixels = canvasHelper.getMap(facePart.downLip);
         const frames = [];
-    
-        encoder.createReadStream().pipe(fs.createWriteStream('1.gif'));
+        const gifName = `${uploadFolder}/${fileName}.gif`;
+        
+        encoder.createReadStream().pipe(fs.createWriteStream(gifName));
         encoder.start();
         encoder.setQuality(5);
         encoder.setRepeat(0);
@@ -78,14 +79,14 @@ app.get('/', (req, res) => {
         }
     
         /** Открываем рот */
-        for (var i = 0; i < frames.length; i++) {
+        for (var i = 0; i < frames.length; i+=3) {
             let canvas = frames[i];
             let ctx = canvas.getContext('2d');
             encoder.addFrame(ctx);
         }
     
         /** Закрываем рот */
-        for (var i = frames.length -1; i > 0; i--) {
+        for (var i = frames.length -1; i > 0; i-=3) {
             let canvas = frames[i];
             let ctx = canvas.getContext('2d');
             encoder.addFrame(ctx);
@@ -98,3 +99,4 @@ app.get('/', (req, res) => {
 });
 
 app.listen(3000, () => console.log('server running on port 3000'));
+

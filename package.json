@@ -10,7 +10,6 @@
         "gifencoder": "2.0.1",
         "express": "4.16.4",
         "face-recognition": "0.9.4",
-        "fluent-ffmpeg": "2.1.2",
         "fs": "0.0.1-security",
         "http": "0.0.0",
         "request": "^2.88.0"
